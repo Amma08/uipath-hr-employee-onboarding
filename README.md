@@ -106,6 +106,22 @@ Closes applications and ends the process.
 
 
 
+\## Features
+
+
+
+\- Automated employee onboarding workflow
+
+\- Excel configuration management
+
+\- Queue-based transaction processing
+
+\- Exception handling using REFramework
+
+\- Logging and retry mechanism
+
+
+
 \## Author
 
 Amma Somuah-Ansong
