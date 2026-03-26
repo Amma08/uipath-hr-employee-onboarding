@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="DvFug1KfvkSML8OSPOVMxA" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" CVScreenId="e1070257-4cf9-4047-9e0f-6f7b3623eb0e" CvElementArea="192, 304, 348, 48" CvType="InputBox" DesignTimeRectangle="192, 304, 348, 48" ElementType="InputBox" Guid="a1198428-fc8b-4dce-b24a-0eda96fc1b2a" IsResponsive="True" ScopeSelectorArgument="&lt;wnd app='msedge.exe' cls='Chrome_WidgetWin_1' title='Dummy HR System - Personal - Microsoft​ Edge' /&gt;" SearchSteps="CV" TargetType="ComputerVisionBased" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target CVScreenId="e1070257-4cf9-4047-9e0f-6f7b3623eb0e" CvTextArea="35, 313, 154, 28" CvTextArgument="First Name:" CvType="Text" DesignTimeRectangle="35, 313, 154, 28" ElementType="Text" Guid="19fe0019-dfa5-4dbb-b8cc-c36aa2f2041e" SearchSteps="CV" TargetType="ComputerVisionBased" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="496e3f73ff4b8501bf4cafd5b4180d60.png" xmlns="">0Gd9Ug3WbH0-L67bUOeOcOQ</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">TypeInto</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

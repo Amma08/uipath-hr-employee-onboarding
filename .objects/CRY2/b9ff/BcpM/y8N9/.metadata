@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Search or enter web add…",
+  "Type": "Element",
+  "TaxonomyType": "Input",
+  "Id": "y8N98298OkS-aSt_3OZFHg",
+  "Reference": "m0mvIDpwgkqT9iY0lFl_gA/y8N98298OkS-aSt_3OZFHg",
+  "ParentRef": "m0mvIDpwgkqT9iY0lFl_gA/BcpMssZexkqVCXKLtNlcpw",
+  "Created": "2026-01-19T08:04:48.8752154Z",
+  "Updated": "2026-01-19T08:04:48.8752154Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

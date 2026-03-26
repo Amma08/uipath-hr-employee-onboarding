@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Edge Dummy HR System - Personal - Microsoft​ (2)",
+  "Type": "Screen",
+  "Id": "UW220EgAIUm6Y7vdxBc1fA",
+  "Reference": "m0mvIDpwgkqT9iY0lFl_gA/UW220EgAIUm6Y7vdxBc1fA",
+  "ParentRef": "m0mvIDpwgkqT9iY0lFl_gA/b9ffS-8r-0KK4aooJMnH2Q",
+  "Created": "2026-01-19T10:03:16.3234786Z",
+  "Updated": "2026-01-19T10:03:16.3234786Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

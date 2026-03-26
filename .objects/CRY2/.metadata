@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Edge New tab - Personal - Microsoft​ Edge",
+  "Type": "App",
+  "Id": "CRY22rZFAUeKBuBRyBUF6w",
+  "Reference": "m0mvIDpwgkqT9iY0lFl_gA/CRY22rZFAUeKBuBRyBUF6w",
+  "Created": "2026-01-19T08:01:28.7685235Z",
+  "Updated": "2026-01-19T08:01:28.7685235Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.12.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

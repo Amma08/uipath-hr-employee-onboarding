@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="wTzv-iSFw0qs5LNBwzh1sg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" CVScreenId="6cf6daf4-f4e7-4611-bc93-9bfbd1250b8e" CvElementArea="33, 624, 244, 49" CvTextArea="51, 633, 208, 32" CvTextArgument="Create Employee" CvType="Button" DesignTimeRectangle="33, 624, 244, 49" ElementType="Button" Guid="0a80ae8a-63f3-4136-9b70-a04ac8e13ba6" ScopeSelectorArgument="&lt;wnd app='msedge.exe' cls='Chrome_WidgetWin_1' title='Dummy HR System - Personal - Microsoft​ Edge' /&gt;" SearchSteps="CV" TargetType="ComputerVisionBased" Version="V6" Visibility="Interactive" WaitForReadyArgument="Interactive">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target CVScreenId="6cf6daf4-f4e7-4611-bc93-9bfbd1250b8e" CvTextArea="35, 553, 162, 34" CvTextArgument="Department:" CvType="Text" DesignTimeRectangle="35, 553, 162, 34" ElementType="Text" Guid="d9ea2916-5cec-4e8b-bd28-1380b878a699" SearchSteps="CV" TargetType="ComputerVisionBased" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="8434e0b824851e67c41692bacf596bfa.png" xmlns="">0tCdDUpc0lEuesbdqLjcjoA</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

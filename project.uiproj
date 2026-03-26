@@ -1,0 +1,6 @@
+{
+  "Name": "HR_EmployeeOnboarding2",
+  "ProjectType": "Process",
+  "Description": "Autoamte employee onbording to the organization",
+  "MainFile": "Main.xaml"
+}
