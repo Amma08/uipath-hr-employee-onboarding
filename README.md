@@ -68,7 +68,47 @@ The automation uses the REFramework for:
 
 
 
+
+
+\## Architecture
+
+
+
+This automation uses UiPath REFramework.
+
+
+
+States in the workflow:
+
+
+
+Initialization
+
+Loads configuration and prepares applications.
+
+
+
+Get Transaction Data
+
+Retrieves employee onboarding data.
+
+
+
+Process Transaction
+
+Processes each employee onboarding record.
+
+
+
+End Process
+
+Closes applications and ends the process.
+
+
+
 \## Author
 
 Amma Somuah-Ansong
+
+
 
