@@ -26,3 +26,9 @@ jobs:
 
       - name: Pack project
         run: uipcli package pack project.json -o output
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: uipath-package
+          path: output
