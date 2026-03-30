@@ -32,30 +32,25 @@ jobs:
       - name: Pack project
         run: uipcli package pack project.json -o output
 
-      # ✅ Upload artifact (optional but useful)
+      # ✅ Upload artifact (optional)
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: uipath-package
           path: output
 
-      # 🚀 Deploy package to Orchestrator
+      # 🚀 Deploy package to Orchestrator (FIXED)
       - name: Deploy Package
         run: |
           uipcli package deploy output/*.nupkg `
-          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" `
-          --accountName "${{ secrets.UIPATH_ORG }}" `
-          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" `
-          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" `
-          --folder "My Workspace"
+          "https://cloud.uipath.com/" `
+          "${{ secrets.UIPATH_TENANT }}" `
+          -A "${{ secrets.UIPATH_ORG }}" `
+          -I "${{ secrets.UIPATH_CLIENT_ID }}" `
+          -S "${{ secrets.UIPATH_CLIENT_SECRET }}" `
+          --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes" `
+          -o "My Workspace"
 
-      # 🚀 Run Job automatically
-      - name: Run Job
-        run: |
-          uipcli job start `
-          --processName "HR_EmployeeOnboarding2" `
-          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" `
-          --accountName "${{ secrets.UIPATH_ORG }}" `
-          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" `
-          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" `
-          --folder "My Workspace"
+      # 🚀 Confirmation step
+      - name: Deployment Complete
+        run: echo "Package deployed successfully to Orchestrator"
