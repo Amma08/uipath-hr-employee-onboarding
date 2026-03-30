@@ -1,4 +1,4 @@
-name: UiPath CI Pipeline
+name: UiPath CI/CD Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-deploy:
     runs-on: windows-latest
 
     steps:
@@ -21,14 +21,32 @@ jobs:
       - name: Install UiPath CLI
         run: dotnet tool install --global UiPath.CLI.Windows
 
-      - name: Add .NET tools to PATH
+      - name: Add CLI to PATH
         run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
       - name: Pack project
         run: uipcli package pack project.json -o output
 
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: uipath-package
-          path: output
+      # 🔥 LOGIN TO ORCHESTRATOR
+      - name: Login to Orchestrator
+        run: |
+          uipcli config set orchestratorUrl https://cloud.uipath.com
+          uipcli config set orchestratorTenant ${{ secrets.UIPATH_TENANT }}
+          uipcli config set accountName ${{ secrets.UIPATH_ORG }}
+          uipcli config set clientId ${{ secrets.UIPATH_CLIENT_ID }}
+          uipcli config set clientSecret ${{ secrets.UIPATH_CLIENT_SECRET }}
+
+      # 🚀 DEPLOY PACKAGE
+      - name: Deploy Package
+        run: |
+          uipcli package deploy output/*.nupkg --folder "My Workspace"
+
+      # 🚀 CREATE / UPDATE PROCESS
+      - name: Create Process
+        run: |
+          uipcli process create --name "HR_EmployeeOnboarding2" --package "HR_EmployeeOnboarding2" --folder "My Workspace"
+
+      # 🚀 RUN JOB
+      - name: Run Job
+        run: |
+          uipcli job start --process "HR_EmployeeOnboarding2" --folder "My Workspace"
