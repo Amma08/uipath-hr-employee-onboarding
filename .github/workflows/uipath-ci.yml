@@ -10,40 +10,52 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # ✅ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ✅ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
 
+      # ✅ Install UiPath CLI
       - name: Install UiPath CLI
         run: dotnet tool install --global UiPath.CLI.Windows
 
+      # ✅ Add CLI to PATH
       - name: Add CLI to PATH
         run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
+      # ✅ Pack project
       - name: Pack project
         run: uipcli package pack project.json -o output
 
-            # 🚀 DEPLOY PACKAGE (WITH AUTH)
+      # ✅ Upload artifact (optional but useful)
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: uipath-package
+          path: output
+
+      # 🚀 Deploy package to Orchestrator
       - name: Deploy Package
         run: |
-          uipcli package deploy output/*.nupkg ^
-          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" ^
-          --accountName "${{ secrets.UIPATH_ORG }}" ^
-          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" ^
-          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" ^
+          uipcli package deploy output/*.nupkg `
+          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" `
+          --accountName "${{ secrets.UIPATH_ORG }}" `
+          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" `
+          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" `
           --folder "My Workspace"
 
-      # 🚀 RUN JOB
+      # 🚀 Run Job automatically
       - name: Run Job
         run: |
-          uipcli job start ^
-          --processName "HR_EmployeeOnboarding2" ^
-          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" ^
-          --accountName "${{ secrets.UIPATH_ORG }}" ^
-          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" ^
-          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" ^
+          uipcli job start `
+          --processName "HR_EmployeeOnboarding2" `
+          --orchestratorUrl "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}/${{ secrets.UIPATH_TENANT }}" `
+          --accountName "${{ secrets.UIPATH_ORG }}" `
+          --applicationId "${{ secrets.UIPATH_CLIENT_ID }}" `
+          --applicationSecret "${{ secrets.UIPATH_CLIENT_SECRET }}" `
           --folder "My Workspace"
