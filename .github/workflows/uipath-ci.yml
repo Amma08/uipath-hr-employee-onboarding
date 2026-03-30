@@ -39,18 +39,18 @@ jobs:
           name: uipath-package
           path: output
 
-      # 🚀 Deploy package to Orchestrator (FIXED)
+      # 🚀 Deploy package to Orchestrator (FINAL FIX)
       - name: Deploy Package
         run: |
           uipcli package deploy output/*.nupkg `
-          "https://cloud.uipath.com/" `
+          "https://cloud.uipath.com/${{ secrets.UIPATH_ORG }}" `
           "${{ secrets.UIPATH_TENANT }}" `
           -A "${{ secrets.UIPATH_ORG }}" `
           -I "${{ secrets.UIPATH_CLIENT_ID }}" `
           -S "${{ secrets.UIPATH_CLIENT_SECRET }}" `
-          --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes" `
+          --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes OR.Users" `
           -o "My Workspace"
 
-      # 🚀 Confirmation step
+      # 🚀 Confirmation
       - name: Deployment Complete
         run: echo "Package deployed successfully to Orchestrator"
