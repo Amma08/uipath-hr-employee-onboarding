@@ -38,10 +38,9 @@ jobs:
         path: output
 
     - name: Deploy Package
-      shell: cmd
-      run: |
-        uipcli package deploy output/*.nupkg https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
-
+  shell: cmd
+  run: |
+    uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes OR.Assets OR.Users.Read OR.Robots.Read OR.Machines.Read OR.Settings.Read OR.Monitoring" --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
     - name: Run Job
       shell: cmd
       run: |
