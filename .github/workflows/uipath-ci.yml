@@ -38,7 +38,11 @@ jobs:
         name: uipath-package
         path: output
 
-    # 🚀 DEPLOY (CLEAN VERSION)
+    - name: Debug Secrets
+      run: |
+       echo "ORG=${{ secrets.UIPATH_ORG }}"
+            echo "TENANT=${{ secrets.UIPATH_TENANT }}"
+  
     - name: Deploy Package
       run: |
         uipcli package deploy output/*.nupkg https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace"
