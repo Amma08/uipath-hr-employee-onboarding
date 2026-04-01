@@ -24,7 +24,7 @@ jobs:
     - name: Add CLI to PATH
       run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
     - name: Restore dependencies
-      run: uipcli package restore
+      run: uipcli package restore . --restoreFolder output
 
     - name: Pack project
       run: uipcli package pack project.json -o output
