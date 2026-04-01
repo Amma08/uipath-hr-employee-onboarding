@@ -1,4 +1,4 @@
-name: Test Pipeline
+name: UiPath CI - Build Only
 
 on:
   push:
@@ -6,9 +6,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: windows-latest
 
     steps:
-      - name: Say Hello
-        run: echo "Pipeline is working"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install UiPath CLI
+        run: dotnet tool install --global UiPath.CLI.Windows
+
+      - name: Add CLI to PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      - name: Pack project
+        run: uipcli package pack project.json -o output
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: uipath-package
+          path: output
