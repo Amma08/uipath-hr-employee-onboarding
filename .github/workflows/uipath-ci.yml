@@ -46,4 +46,7 @@ jobs:
     - name: Deploy Package
       shell: cmd
       run: uipcli package deploy output/*.nupkg https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace"
-      
+    - name: Run Job
+  shell: cmd
+  run: >
+    uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --traceLevel Verbose
