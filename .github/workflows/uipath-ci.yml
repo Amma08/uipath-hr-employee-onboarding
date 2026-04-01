@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-deploy:
+  build-deploy-run:
     runs-on: windows-latest
 
     steps:
@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
 
@@ -25,7 +25,6 @@ jobs:
     - name: Add CLI to PATH
       run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
-    # 🔥 FIX: Clear broken cache (solves Process.Activities error)
     - name: Clear NuGet cache
       run: dotnet nuget locals all --clear
 
@@ -38,15 +37,15 @@ jobs:
         name: uipath-package
         path: output
 
-    - name: Debug Secrets
-      run: |
-        echo "ORG=${{ secrets.UIPATH_ORG }}"
-        echo "TENANT=${{ secrets.UIPATH_TENANT }}"
-
     - name: Deploy Package
       shell: cmd
-      run: uipcli package deploy output/*.nupkg https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace"
+      run: |
+        uipcli package deploy output/*.nupkg https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
+
     - name: Run Job
-  shell: cmd
-  run: >
-    uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --traceLevel Verbose
+      shell: cmd
+      run: |
+        uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --traceLevel Verbose
+
+    - name: Done
+      run: echo "CI/CD Pipeline completed successfully"
