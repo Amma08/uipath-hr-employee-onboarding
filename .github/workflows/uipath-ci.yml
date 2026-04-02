@@ -31,36 +31,36 @@ jobs:
         shell: pwsh
         run: uipcli --version
 
-      - name: Clear NuGet cache
-        run: dotnet nuget locals all --clear
+      # 🔥 IMPORTANT: CLEAN + CREATE OUTPUT
+      - name: Prepare output folder
+        shell: cmd
+        run: |
+          IF EXIST output rmdir /s /q output
+          mkdir output
 
-      # ✅ CLEAN OUTPUT FOLDER
-      - name: Create output folder
-        run: mkdir output
-
-      # ✅ RESTORE
+      # ✅ RESTORE (USE ROOT)
       - name: Restore dependencies
-        run: uipcli package restore . --restoreFolder output
+        run: uipcli package restore . 
 
-      # ✅ PACK (IMPORTANT FIX)
+      # 🔥 CRITICAL FIX: USE project.json
       - name: Pack project
-        run: uipcli package pack . -o output
+        run: uipcli package pack project.json -o output
 
-      # 🔍 VERIFY PACKAGE EXISTS
-      - name: Check output folder
+      # 🔍 DEBUG: SHOW FILES
+      - name: Show output folder
         shell: cmd
         run: dir output
 
-      # 🚨 HARD STOP IF NO PACKAGE
-      - name: Fail if no package
+      # 🚨 STOP IF PACKAGE NOT FOUND
+      - name: Ensure package exists
         shell: cmd
         run: |
           IF NOT EXIST output\*.nupkg (
-            echo ERROR: No package created
+            echo ❌ PACKAGE NOT CREATED
             exit /b 1
           )
 
-      # 🚀 DEPLOY (CORRECT FOLDER)
+      # 🚀 DEPLOY
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
@@ -73,4 +73,4 @@ jobs:
           uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --traceLevel Verbose
 
       - name: Done
-        run: echo Pipeline completed successfully
+        run: echo SUCCESS 🚀
