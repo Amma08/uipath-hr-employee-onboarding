@@ -11,40 +11,41 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 6.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Install UiPath CLI
-      run: dotnet tool install --global UiPath.CLI.Windows
+      - name: Install UiPath CLI
+        run: dotnet tool install --global UiPath.CLI.Windows
 
-    - name: Add CLI to PATH
-      run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+      - name: Add CLI to PATH
+        run: echo "%USERPROFILE%\.dotnet\tools" >> %GITHUB_PATH%
 
-    - name: Clear NuGet cache
-      run: dotnet nuget locals all --clear
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
 
-    - name: Pack project
-      run: uipcli package pack project.json -o output
+      - name: Pack project
+        run: uipcli package pack project.json -o output
 
-    - name: Upload package
-      uses: actions/upload-artifact@v4
-      with:
-        name: uipath-package
-        path: output
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: uipath-package
+          path: output
 
-    - name: Deploy Package
-  shell: cmd
-  run: |
-    uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes OR.Assets OR.Users.Read OR.Robots.Read OR.Machines.Read OR.Settings.Read OR.Monitoring" --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
-    - name: Run Job
-      shell: cmd
-      run: |
-        uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/${{ secrets.UIPATH_ORG }} ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --traceLevel Verbose
+      - name: Deploy Package
+        shell: cmd
+        run: >
+          uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --applicationScope "OR.Folders OR.Execution OR.Jobs OR.Packages OR.Processes OR.Assets OR.Users.Read OR.Robots.Read OR.Machines.Read OR.Settings.Read OR.Monitoring" --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
-    - name: Done
-      run: echo "CI/CD Pipeline completed successfully"
+      - name: Run Job
+        shell: cmd
+        run: >
+          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -A ${{ secrets.UIPATH_ORG }} -I ${{ secrets.UIPATH_CLIENT_ID }} -S ${{ secrets.UIPATH_CLIENT_SECRET }} --identityUrl https://cloud.uipath.com/identity -o "My Workspace" --traceLevel Verbose
+
+      - name: Done
+        run: echo Pipeline completed successfully
