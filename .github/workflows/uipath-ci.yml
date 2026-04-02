@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: '6.0.x'
 
       - name: Install UiPath CLI
         run: dotnet tool install --global UiPath.CLI.Windows
@@ -31,32 +31,29 @@ jobs:
         shell: pwsh
         run: uipcli --version
 
-      # ✅ Create output folder (safe)
       - name: Create output folder
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path output
+          if (Test-Path output) {
+            Remove-Item output -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path output
 
-      # ✅ Restore dependencies (REQUIRED)
       - name: Restore dependencies
         run: uipcli package restore . --restoreFolder output
 
-      # ✅ Pack project (CRITICAL FIX)
       - name: Pack project
         run: uipcli package pack . -o output
 
-      # ✅ Confirm package exists
       - name: Check package
         shell: cmd
         run: dir output
 
-      # 🚀 Deploy
-       - name: Deploy Package (PAT)
-  shell: cmd
-  run: >
-    uipcli package deploy output\HR_EmployeeOnboarding2.1.0.2.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Information
+      - name: Deploy Package
+        shell: cmd
+        run: >
+          uipcli package deploy output\HR_EmployeeOnboarding2.1.0.2.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Information
 
-      # ▶️ Run job
       - name: Run Job
         shell: cmd
         run: >
