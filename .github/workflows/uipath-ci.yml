@@ -38,7 +38,7 @@ jobs:
          New-Item -ItemType Directory -Path output
       # ✅ RESTORE (USE ROOT)
       - name: Restore dependencies
-        run: uipcli package restore . 
+        run: uipcli package restore . --restoreFolder output
 
       # 🔥 CRITICAL FIX: USE project.json
       - name: Pack project
