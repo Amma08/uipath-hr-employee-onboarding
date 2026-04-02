@@ -30,14 +30,12 @@ jobs:
       - name: Verify CLI
         shell: pwsh
         run: uipcli --version
-
-      # 🔥 IMPORTANT: CLEAN + CREATE OUTPUT
       - name: Prepare output folder
-        shell: cmd
+        shell: pwsh
         run: |
-          IF EXIST output rmdir /s /q output
-          mkdir output
-
+         if (Test-Path output) {
+         Remove-Item output -Recurse -Force}
+         New-Item -ItemType Directory -Path output
       # ✅ RESTORE (USE ROOT)
       - name: Restore dependencies
         run: uipcli package restore . 
