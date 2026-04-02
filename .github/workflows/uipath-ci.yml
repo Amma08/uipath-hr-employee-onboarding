@@ -1,4 +1,4 @@
-name: UiPath CI/CD Pipeline (DEBUG)
+name: UiPath CI/CD Pipeline
 
 on:
   push:
@@ -30,52 +30,35 @@ jobs:
       - name: Verify CLI
         shell: pwsh
         run: |
-          Get-Command uipcli
           uipcli --version
-
-      # 🔍 DEBUG: SHOW ROOT FILES
-      - name: Show repo root
-        shell: cmd
-        run: dir
-
-      # 🔍 DEBUG: SHOW EVERYTHING
-      - name: Show full repo structure
-        shell: cmd
-        run: dir /s
 
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
-      # 🔧 RESTORE
+      # ✅ RESTORE (FIXED)
       - name: Restore dependencies
-        run: uipcli package restore . --restoreFolder output
+        run: uipcli package restore . --restoreFolder .
 
-      # 📦 PACK
+      # ✅ PACK (FIXED)
       - name: Pack project
-        run: uipcli package pack . -o output
+        run: uipcli package pack . -o .
 
-      # 🔍 DEBUG: CHECK OUTPUT
-      - name: Show output folder
+      # ✅ VERIFY PACKAGE EXISTS
+      - name: Check package
         shell: cmd
-        run: dir output
+        run: dir *.nupkg
 
-      - name: Upload package
-        uses: actions/upload-artifact@v4
-        with:
-          name: uipath-package
-          path: output
-
-      # 🚀 DEPLOY (will fail if no .nupkg — that’s fine for now)
+      # 🚀 DEPLOY (FIXED FOLDER)
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO/HR" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipcli package deploy *.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
       # ▶️ RUN JOB
       - name: Run Job
         shell: cmd
         run: >
-          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO/HR" --traceLevel Verbose
+          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --traceLevel Verbose
 
       - name: Done
         run: echo Pipeline completed successfully
