@@ -33,16 +33,17 @@ jobs:
           Get-Command uipcli
           uipcli --version
 
-    
-      # 🔥 FIXED RESTORE STEP
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      # ✅ FIXED: USE ROOT PROJECT (.)
       - name: Restore dependencies
-        run: uipcli package restore HR_EmployeeOnboarding2 --restoreFolder output
+        run: uipcli package restore . --restoreFolder output
 
-      # 🔥 FIXED PACK STEP
       - name: Pack project
-        run: uipcli package pack HR_EmployeeOnboarding2 -o output
+        run: uipcli package pack . -o output
 
-      # 🔍 DEBUG STEP
+      # 🔍 DEBUG (VERY IMPORTANT)
       - name: Check output files
         shell: cmd
         run: dir output
