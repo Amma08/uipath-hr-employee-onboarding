@@ -29,30 +29,42 @@ jobs:
 
       - name: Verify CLI
         shell: pwsh
-        run: |
-          uipcli --version
+        run: uipcli --version
 
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
-      # ✅ RESTORE (FIXED)
+      # ✅ CLEAN OUTPUT FOLDER
+      - name: Create output folder
+        run: mkdir output
+
+      # ✅ RESTORE
       - name: Restore dependencies
-        run: uipcli package restore . --restoreFolder .
+        run: uipcli package restore . --restoreFolder output
 
-      # ✅ PACK (FIXED)
+      # ✅ PACK (IMPORTANT FIX)
       - name: Pack project
-        run: uipcli package pack . -o .
+        run: uipcli package pack . -o output
 
-      # ✅ VERIFY PACKAGE EXISTS
-      - name: Check package
+      # 🔍 VERIFY PACKAGE EXISTS
+      - name: Check output folder
         shell: cmd
-        run: dir *.nupkg
+        run: dir output
 
-      # 🚀 DEPLOY (FIXED FOLDER)
+      # 🚨 HARD STOP IF NO PACKAGE
+      - name: Fail if no package
+        shell: cmd
+        run: |
+          IF NOT EXIST output\*.nupkg (
+            echo ERROR: No package created
+            exit /b 1
+          )
+
+      # 🚀 DEPLOY (CORRECT FOLDER)
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy *.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipcli package deploy output\*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
       # ▶️ RUN JOB
       - name: Run Job
