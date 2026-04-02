@@ -31,46 +31,36 @@ jobs:
         shell: pwsh
         run: uipcli --version
 
-      # ✅ CLEAN OUTPUT FOLDER (SAFE)
-      - name: Prepare output folder
+      # ✅ Create output folder (safe)
+      - name: Create output folder
         shell: pwsh
         run: |
-          if (Test-Path output) {
-              Remove-Item output -Recurse -Force
-          }
-          New-Item -ItemType Directory -Path output
+          New-Item -ItemType Directory -Force -Path output
 
-      # ✅ RESTORE (FIXED)
+      # ✅ Restore dependencies (REQUIRED)
       - name: Restore dependencies
         run: uipcli package restore . --restoreFolder output
 
-      # ✅ PACK (NO OUTPUT ASSUMPTION)
+      # ✅ Pack project (CRITICAL FIX)
       - name: Pack project
-        run: uipcli package pack .
+        run: uipcli package pack . -o output
 
-      # 🔍 FIND PACKAGE DYNAMICALLY
-      - name: Find package
-        shell: pwsh
-        run: |
-          $pkg = Get-ChildItem -Recurse -Filter *.nupkg | Select-Object -First 1
-          if (-not $pkg) {
-              Write-Error "❌ No package found"
-              exit 1
-          }
-          echo "PACKAGE_PATH=$($pkg.FullName)" >> $env:GITHUB_ENV
-          Write-Host "✅ Found package: $($pkg.FullName)"
+      # ✅ Confirm package exists
+      - name: Check package
+        shell: cmd
+        run: dir output
 
-      # 🚀 DEPLOY
+      # 🚀 Deploy
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy "%PACKAGE_PATH%" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipcli package deploy output\*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Information
 
-      # ▶️ RUN JOB
+      # ▶️ Run job
       - name: Run Job
         shell: cmd
         run: >
-          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --traceLevel Verbose
+          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO"
 
       - name: Done
-        run: echo SUCCESS 🚀
+        run: echo SUCCESS
