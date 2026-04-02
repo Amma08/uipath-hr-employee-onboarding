@@ -25,11 +25,14 @@ jobs:
       - name: Add CLI to PATH
         run: echo "%USERPROFILE%\.dotnet\tools" >> %GITHUB_PATH%
 
+      - name: Verify CLI
+        run: uipath --version
+
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
       - name: Pack project
-        run: uipcli package pack project.json -o output
+        run: uipath package pack project.json -o output
 
       - name: Upload package
         uses: actions/upload-artifact@v4
@@ -40,12 +43,12 @@ jobs:
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipath package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
       - name: Run Job
         shell: cmd
         run: >
-          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --traceLevel Verbose
+          uipath job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --traceLevel Verbose
 
       - name: Done
         run: echo Pipeline completed successfully
