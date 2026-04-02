@@ -1,4 +1,4 @@
-name: UiPath CI/CD Pipeline
+name: UiPath CI/CD Pipeline (DEBUG)
 
 on:
   push:
@@ -33,18 +33,29 @@ jobs:
           Get-Command uipcli
           uipcli --version
 
+      # 🔍 DEBUG: SHOW ROOT FILES
+      - name: Show repo root
+        shell: cmd
+        run: dir
+
+      # 🔍 DEBUG: SHOW EVERYTHING
+      - name: Show full repo structure
+        shell: cmd
+        run: dir /s
+
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
-      # ✅ FIXED: USE ROOT PROJECT (.)
+      # 🔧 RESTORE
       - name: Restore dependencies
         run: uipcli package restore . --restoreFolder output
 
+      # 📦 PACK
       - name: Pack project
         run: uipcli package pack . -o output
 
-      # 🔍 DEBUG (VERY IMPORTANT)
-      - name: Check output files
+      # 🔍 DEBUG: CHECK OUTPUT
+      - name: Show output folder
         shell: cmd
         run: dir output
 
@@ -54,7 +65,7 @@ jobs:
           name: uipath-package
           path: output
 
-      # 🚀 DEPLOY
+      # 🚀 DEPLOY (will fail if no .nupkg — that’s fine for now)
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
