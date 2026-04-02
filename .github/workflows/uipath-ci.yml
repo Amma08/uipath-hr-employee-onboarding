@@ -36,8 +36,11 @@ jobs:
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
+      - name: Restore dependencies
+        run: uipcli package restore
+
       - name: Pack project
-        run: uipcli package pack . -o output
+        run: uipcli package pack HR_EmployeeOnboarding2 -o output
 
       - name: Check output files
         shell: cmd
