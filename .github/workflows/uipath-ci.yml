@@ -48,12 +48,12 @@ jobs:
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipcli package deploy output/*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO/HR" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
       - name: Run Job
         shell: cmd
         run: >
-          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "My Workspace" --traceLevel Verbose
+          uipcli job run "HR_EmployeeOnboarding2" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO/HR" --traceLevel Verbose
 
       - name: Done
         run: echo Pipeline completed successfully
