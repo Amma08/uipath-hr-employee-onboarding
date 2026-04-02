@@ -37,7 +37,11 @@ jobs:
         run: dotnet nuget locals all --clear
 
       - name: Pack project
-        run: uipcli package pack project.json -o output
+        run: uipcli package pack . -o output
+
+      - name: Check output files
+        shell: cmd
+        run: dir output
 
       - name: Upload package
         uses: actions/upload-artifact@v4
