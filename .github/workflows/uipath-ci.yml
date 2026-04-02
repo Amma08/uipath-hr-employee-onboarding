@@ -33,9 +33,7 @@ jobs:
           Get-Command uipcli
           uipcli --version
 
-      - name: Clear NuGet cache
-        run: dotnet nuget locals all --clear
-
+    
       # 🔥 FIXED RESTORE STEP
       - name: Restore dependencies
         run: uipcli package restore HR_EmployeeOnboarding2 --restoreFolder output
