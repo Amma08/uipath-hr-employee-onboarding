@@ -51,10 +51,10 @@ jobs:
         run: dir output
 
       # 🚀 Deploy
-      - name: Deploy Package (PAT)
-        shell: cmd
-        run: >
-          uipcli package deploy output\*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Information
+       - name: Deploy Package (PAT)
+  shell: cmd
+  run: >
+    uipcli package deploy output\HR_EmployeeOnboarding2.1.0.2.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Information
 
       # ▶️ Run job
       - name: Run Job
