@@ -30,39 +30,41 @@ jobs:
       - name: Verify CLI
         shell: pwsh
         run: uipcli --version
+
+      # ✅ CLEAN OUTPUT FOLDER (SAFE)
       - name: Prepare output folder
         shell: pwsh
         run: |
-         if (Test-Path output) {
-         Remove-Item output -Recurse -Force}
-         New-Item -ItemType Directory -Path output
-      # ✅ RESTORE (USE ROOT)
+          if (Test-Path output) {
+              Remove-Item output -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path output
+
+      # ✅ RESTORE (FIXED)
       - name: Restore dependencies
         run: uipcli package restore . --restoreFolder output
 
-      # 🔥 CRITICAL FIX: USE project.json
+      # ✅ PACK (NO OUTPUT ASSUMPTION)
       - name: Pack project
-        run: uipcli package pack project.json -o output
+        run: uipcli package pack .
 
-      # 🔍 DEBUG: SHOW FILES
-      - name: Show output folder
-        shell: cmd
-        run: dir output
-
-      # 🚨 STOP IF PACKAGE NOT FOUND
-      - name: Ensure package exists
-        shell: cmd
+      # 🔍 FIND PACKAGE DYNAMICALLY
+      - name: Find package
+        shell: pwsh
         run: |
-          IF NOT EXIST output\*.nupkg (
-            echo ❌ PACKAGE NOT CREATED
-            exit /b 1
-          )
+          $pkg = Get-ChildItem -Recurse -Filter *.nupkg | Select-Object -First 1
+          if (-not $pkg) {
+              Write-Error "❌ No package found"
+              exit 1
+          }
+          echo "PACKAGE_PATH=$($pkg.FullName)" >> $env:GITHUB_ENV
+          Write-Host "✅ Found package: $($pkg.FullName)"
 
       # 🚀 DEPLOY
       - name: Deploy Package (PAT)
         shell: cmd
         run: >
-          uipcli package deploy output\*.nupkg https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
+          uipcli package deploy "%PACKAGE_PATH%" https://cloud.uipath.com/ ${{ secrets.UIPATH_TENANT }} -t ${{ secrets.UIPATH_PAT }} -a ${{ secrets.UIPATH_ORG }} -o "AMMASO" --entryPointsPath "Main.xaml" --traceLevel Verbose
 
       # ▶️ RUN JOB
       - name: Run Job
